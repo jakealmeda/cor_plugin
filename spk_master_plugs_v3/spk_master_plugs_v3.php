@@ -214,6 +214,5 @@ require_once( 'codec/spk_quotes.php' );
 require_once( 'codec/spk_master_plug_v1.php' );
 // get permalink
 require_once( 'codec/spk_get_permalink.php' );
-
 // shortcode ultimate remnant
 require_once( 'codec/spk_sc_get_post_content.php' );
