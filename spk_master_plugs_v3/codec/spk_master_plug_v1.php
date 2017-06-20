@@ -149,7 +149,8 @@ function swps_st_externals() {
                     <span><a class="item-icon icon-youtube" href="https://www.youtube.com/user/coachcoreywayne?sub_confirmation=1"></a></span>
                     <span><a class="item-icon icon-googleplus" href="https://plus.google.com/+CoachCoreyWaynesOfficial/posts"></a></span>
                     <span><a class="item-icon icon-instagram" href="https://instagram.com/CoachCoreyWayne/"></a></span>
-                    <span><a class="item-icon icon-pinterest" href="https://www.pinterest.com/coachcoreywayne/"></a></span>';
+                    <span><a class="item-icon icon-pinterest" href="https://www.pinterest.com/coachcoreywayne/"></a></span>
+                    <span><a class="item-icon icon-medium" href="https://medium.com/@coachcoreywayne"></a></span>';
 
     $media_bd = '<a href="https://www.understandingrelationships.com/products/free-ebook"><h5 class="space-bottom-half">Free eBook &amp; Online Audio Program Access</h5></a>
                  <a href="https://amzn.to/1rlT7vd"><h5 class="space-bottom-half">Book - Audio Version Free $0.00 with an Audible.com Membership</h5></a>
