@@ -951,7 +951,7 @@ function spk_shortcoders_pub() {
         
         // get id
         $pid = $post->id;
-
+        
         // get sc slug
         $the_slug = get_post_meta( $pid, '_spk_shortcoders_slug', true);
         if( !empty( $the_slug ) ) {
@@ -977,6 +977,9 @@ function spk_shortcoders_pub() {
             // create dynamic functions
             // use -> it gets the local variables within the code and uses them inside the function
             $sc_this = function( $atts, $content = null ) use ( $pid, $sc_code ) {
+
+                // execute all shortcodes found within the shortcode template
+                $sc_code = do_shortcode( $sc_code );
 
                 // loop through each attribute (specified)
                 if( is_array( $atts ) ) {
@@ -1052,7 +1055,7 @@ function spk_shortcoders_pub() {
                                             } else {
                                                 $contents = get_post_field( $gwpf, spk_get_post_id( $atts[ $key ] ), $context = 'display' );
                                             }
-
+                                            
                                             $sc_code = str_replace( '{@'.$gwpf.'}', $contents, $sc_code );
                                         }
 
@@ -1108,7 +1111,7 @@ function spk_shortcoders_pub() {
                 // apply string replace to {@content} (this is the content between the opening and closing tags [sc]this is it[/sc])
                 $sc_code = str_replace( '{@content}', do_shortcode( $content ), $sc_code );
 
-                return do_shortcode( $sc_code );
+                return $sc_code;
 
             };
             // register shortcode
