@@ -906,7 +906,17 @@ function spk_sc_enqueue_scripts() {
     // load js on specific screen only
     if( 'spk_shortcoders' == get_current_screen()->post_type ) {
         // last arg is true - will be placed before </body>
-        wp_enqueue_script( 'spk_shortcoder_js', plugins_url( 'js/asset_min.js', __FILE__ ), NULL, NULL, true );
+        //wp_enqueue_script( 'spk_shortcoder_js', plugins_url( 'js/asset_min.js', __FILE__ ), NULL, NULL, true );
+        wp_register_script( 'spk_shortcoder_js', plugins_url( 'js/asset_min.js', __FILE__ ), NULL, NULL, TRUE );
+     
+        // Localize the script with new data
+        $translation_array = array(
+            'spk_scj_ajax' => plugin_dir_url( __FILE__ ).'/php/',
+        );
+        wp_localize_script( 'spk_shortcoder_js', 'spk_scj', $translation_array );
+         
+        // Enqueued script with localized data.
+        wp_enqueue_script( 'spk_shortcoder_js' );
 
         // enqueue styles
         wp_enqueue_style( 'spk_shortcoder_css', plugin_dir_url( __FILE__ ).'css/style_min.css' );
@@ -951,7 +961,7 @@ function spk_shortcoders_pub() {
         
         // get id
         $pid = $post->id;
-
+        
         // get sc slug
         $the_slug = get_post_meta( $pid, '_spk_shortcoders_slug', true);
         if( !empty( $the_slug ) ) {
@@ -977,6 +987,9 @@ function spk_shortcoders_pub() {
             // create dynamic functions
             // use -> it gets the local variables within the code and uses them inside the function
             $sc_this = function( $atts, $content = null ) use ( $pid, $sc_code ) {
+
+                // execute all shortcodes found within the shortcode template
+                $sc_code = do_shortcode( $sc_code );
 
                 // loop through each attribute (specified)
                 if( is_array( $atts ) ) {
@@ -1052,7 +1065,7 @@ function spk_shortcoders_pub() {
                                             } else {
                                                 $contents = get_post_field( $gwpf, spk_get_post_id( $atts[ $key ] ), $context = 'display' );
                                             }
-
+                                            
                                             $sc_code = str_replace( '{@'.$gwpf.'}', $contents, $sc_code );
                                         }
 
@@ -1108,7 +1121,7 @@ function spk_shortcoders_pub() {
                 // apply string replace to {@content} (this is the content between the opening and closing tags [sc]this is it[/sc])
                 $sc_code = str_replace( '{@content}', do_shortcode( $content ), $sc_code );
 
-                return do_shortcode( $sc_code );
+                return $sc_code;
 
             };
             // register shortcode

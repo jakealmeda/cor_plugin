@@ -1,5 +1,4 @@
-var FadeSpeed = 'fast', FileLoc = location.protocol + "//" + location.host + "/wp-content/plugins/spk_shortcoder/php/",
-    MaxAtts = 20;
+var FadeSpeed = 'fast', FileLoc = spk_scj.spk_scj_ajax, MaxAtts = 20;
 
 jQuery( document ).ready( function () {
 
