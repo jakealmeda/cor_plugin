@@ -73,7 +73,7 @@ if ( !is_admin() ) {
 	}
 
 	// DOWNLOAD GOOGLE JAVASCRIPT FILES AFTER VALIDATING THE FILE'S AGE (DAILY FILE DOWNLOAD)
-	download_external_files();
+	spk_download_external_files();
 
 	// ALLOW PHP TO EXECUTE IN WIDGETS
 	add_filter( 'widget_text', 'php_execute', 100 );
@@ -118,7 +118,7 @@ function spk_redirect_soliloquy_image_urls( $value ) {
 /* --------------------------------------------------------------------------------------------
  * | FUNCTION TO DOWNLOAD EXTERNAL FILES
  * ----------------------------------------------------------------------------------------- */
-function download_external_files() {
+function spk_download_external_files() {
 
 	$spk_externals = array(
 		'amazon_marketplace' 	=> 'http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=9f2cb097-ecee-468c-b007-0b4fcd5a22c9',
@@ -140,16 +140,14 @@ function download_external_files() {
 		$filename = $spk_file_dir.$key.'.js';
 
 		// change file if the age is more than an hour (insures the local file is updated)
-		if ( !is_file( $filename ) ) {
-        	file_put_contents( $filename, file_get_contents( $value ) );
-	    } else {
-	    	// get file's age
+		if( file_exists( $filename ) ) {
+			// get file's age
 	    	$spk_filename_age = time() - strtotime( filemtime( $filename ) );
+		}
 
-	    	if( $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
-	    		file_put_contents( $filename, file_get_contents( $value ) );
-	    	}
-	    }
+    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
+    		file_put_contents( $filename, file_get_contents( $value ) );
+    	}
 
 	}
 }
