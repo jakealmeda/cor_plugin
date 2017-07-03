@@ -18,34 +18,38 @@ if ( ! defined( 'ABSPATH' ) ) {
  * ----------------------------------------------------------------------------------------- */
 if ( !is_admin() ) {
 
-	// remove enqueued scripts from the header
-	remove_action('wp_head', 'wp_print_head_scripts', 9);
-	// then load in the footer
-	add_action('wp_footer', 'wp_enqueue_scripts', 3);
-
+	/*add_action( 'wp_enqueue_scripts', 'spk_remove_head_scripts' );
+	function spk_remove_head_scripts() { 
+	   remove_action('wp_head', 'wp_print_scripts'); 
+	   remove_action('wp_head', 'wp_print_head_scripts', 9); 
+	   remove_action('wp_head', 'wp_enqueue_scripts', 1);
+	 
+	   add_action('wp_footer', 'wp_print_scripts', 5);
+	   add_action('wp_footer', 'wp_enqueue_scripts', 5);
+	   add_action('wp_footer', 'wp_print_head_scripts', 5); 
+	}*/
+	
 	// Defer Javascripts
 	add_filter( 'clean_url', 'defer_parsing_of_js', 11, 1 );
     function defer_parsing_of_js ( $url ) {
-        if ( FALSE === strpos( $url, '.js' ) ) return $url;
-        if ( strpos( $url, 'jquery.js' ) ) return $url;
-        // return "$url' defer ";
-        return $url."' defer onload='";
+        if( FALSE === strpos( $url, '.js' ) ) return $url;
+        if( strpos( $url, 'jquery.js' ) ) return $url."' async='async";
+      	
+        return $url."' defer='defer";
     }
+
+	/*add_action( 'wp_head', 'spk_inline_jquery', 1 );
+	function spk_inline_jquery() {
+		echo '<script type="text/javascript">'.file_get_contents( includes_url( 'js/jquery/jquery.js' ) ).'</script>';
+	}*/
 
 	// FORCE THE CRITICAL CSS TO LOAD INLINE (INSIDE <head></head> TAGS)
     add_action( 'wp_head', 'cor_critical_styling', 10 );
 	function cor_critical_styling() {
-		$critical_style = file_get_contents( get_stylesheet_directory_uri() . '/style_critical_min.css' );
-		echo '<style type="text/css">'.spk_redirect_css_image_urls( $critical_style ).'</style>';
-	}
-
-	// Check if current post has soliloquy shortcode
-	//add_filter('script_loader_tag', 'add_async_attribute', 1, 2);
-	function add_async_attribute( $tag, $handle ) {
-	    if ( 'jquery' !== $handle )
-	    	//echo $handle.'<br>';
-	        return $tag;
-	    return str_replace( ' src', ' defer src', $tag );
+		echo '<style type="text/css">'.
+				spk_redirect_css_image_urls( file_get_contents( get_stylesheet_directory_uri() . '/style_critical_min.css' ) ).
+				spk_redirect_soliloquy_image_urls( file_get_contents( plugin_dir_url( __FILE__ ) . 'css/soliloquy_min.css' ) ).
+			  '</style>';
 	}
 		
 	// ADD NON-CRITICAL STYLING TO THE FOOTER
@@ -54,15 +58,21 @@ if ( !is_admin() ) {
 	function spk_delay_styling_func() {
 		echo "<style type='text/css'>".
 				spk_redirect_css_image_urls( file_get_contents( get_stylesheet_directory_uri() . '/style_critical_non_min.css' ) ).
-				spk_redirect_soliloquy_image_urls( file_get_contents( plugin_dir_url( __FILE__ ) . 'css/soliloquy_min.css' ) ).
 			"</style>";	
 	}
 
 	// DEREGISTER SCRIPTS/STYLES FROM THE FOOTER
-	add_action('wp_footer', 'spk_remove_scripts_styles_footer');
+	add_action( 'wp_footer', 'spk_remove_scripts_styles_footer');
 	function spk_remove_scripts_styles_footer() {
 		wp_dequeue_style( 'soliloquy-style-css' );
 		wp_deregister_style( 'soliloquy-style-css' );
+	}
+
+	add_action( 'wp_footer', 'spk_de_reg_sol_sript', 200 );
+	function spk_de_reg_sol_sript() {
+	    wp_deregister_script( 'soliloquy-script' );
+		wp_register_script( 'soliloquy-script', plugins_url().'/soliloquy/assets/js/min/soliloquy-min.js', NULL, NULL, TRUE );
+		wp_enqueue_script( 'soliloquy-script' );
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
@@ -86,6 +96,15 @@ if ( !is_admin() ) {
 		}
 		return $html;
 	}
+
+	// DISPLAY JAVASCRIPT HANDLERS (REGISTERED NAMES)
+	/*add_action( 'wp_print_scripts', 'wsds_detect_enqueued_scripts' );
+	function wsds_detect_enqueued_scripts() {
+		global $wp_scripts;
+		foreach( $wp_scripts->queue as $handle ) :
+			echo $handle . ' | ';
+		endforeach;
+	}*/
 
 }
 
@@ -180,7 +199,7 @@ function spk_genesis_header_scripts_js_func() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_genesis_footer_scripts_js', 'spk_genesis_footer_scripts_js_func' );
 function spk_genesis_footer_scripts_js_func() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_validate_user_agents() ) {
 
 		return "<script> 
 				 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ 
@@ -230,7 +249,7 @@ function spk_genesis_footer_scripts_js_func() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
 function spk_hide_me_from_google_pagespeedinsights() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_validate_user_agents() ) {
     	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
 				<!-- Page & Post Article Body Resposive Ad -->
 				<ins class="adsbygoogle"
@@ -251,7 +270,7 @@ function spk_hide_me_from_google_pagespeedinsights() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_google_suggested_articles_js', 'spk_hide_me_from_google_pagespeedinsights_2' );
 function spk_hide_me_from_google_pagespeedinsights_2() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_validate_user_agents() ) {
     	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
 				<ins class="adsbygoogle"
 				     style="display:block"
@@ -269,8 +288,20 @@ function spk_hide_me_from_google_pagespeedinsights_2() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_validate_user_agents() ) {
 		return '<script src="'.plugins_url( "/js_external/amazon_marketplace.js", __FILE__ ).'"></script>';
+	}
+}
+
+/* --------------------------------------------------------------------------------------------
+ * | Function to hide scripts from bots
+ * ----------------------------------------------------------------------------------------- */
+function spk_validate_user_agents() {
+	$agents = array( 'GTmetrix', 'Google Page Speed Insights' );
+	foreach ($agents as $value) {
+		if( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) == FALSE ) {
+			return FALSE;
+		}
 	}
 }
 
@@ -291,26 +322,13 @@ function spk_site_url_func() {
 add_action( 'wp_enqueue_scripts', 'spk_masterplug_js_scripts' );
 function spk_masterplug_js_scripts() {
 
-    // enqueue needed native jQuery files
-    if( !wp_script_is( 'jquery-ui-core', 'enqueued' ) ) {
-        wp_enqueue_script('jquery-ui-core');
-    }
+	$scripts = array( 'jquery-ui-core', 'jquery-effects-core', 'jquery-effects-slide', 'jquery-effects-fade', 'jquery-ui-accordion' );
 
-    if( !wp_script_is( 'jquery-effects-core', 'enqueued' ) ) {
-        wp_enqueue_script('jquery-effects-core');
-    }
-
-    if( !wp_script_is( 'jquery-effects-slide', 'enqueued' ) ) {
-        wp_enqueue_script('jquery-effects-slide');
-    }
-
-    if( !wp_script_is( 'jquery-effects-fade', 'enqueued' ) ) {
-        wp_enqueue_script('jquery-effects-fade');
-    }
-
-    if( !wp_script_is( 'jquery-ui-accordion', 'enqueued' ) ) {
-        wp_enqueue_script( 'jquery-ui-accordion' );
-    }
+	foreach ( $scripts as $value ) {
+		if( !wp_script_is( $value, 'enqueued' ) ) {
+        	wp_enqueue_script( $value );
+    	}
+	}
 
 }
 
