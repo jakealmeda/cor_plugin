@@ -33,7 +33,7 @@ if ( !is_admin() ) {
 	add_filter( 'clean_url', 'defer_parsing_of_js', 11, 1 );
     function defer_parsing_of_js ( $url ) {
         if( FALSE === strpos( $url, '.js' ) ) return $url;
-        if( strpos( $url, 'jquery.js' ) ) return $url."' async='async";
+        if( strpos( $url, 'jquery.js' ) ) return $url;//."' async='async";
       	
         return $url."' defer='defer";
     }
