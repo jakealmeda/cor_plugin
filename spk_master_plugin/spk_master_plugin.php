@@ -44,7 +44,7 @@ if ( !is_admin() ) {
 	}*/
 
 	// FORCE THE CRITICAL CSS TO LOAD INLINE (INSIDE <head></head> TAGS)
-    add_action( 'wp_head', 'cor_critical_styling', 10 );
+    //add_action( 'wp_head', 'cor_critical_styling', 10 );
 	function cor_critical_styling() {
 		echo '<style type="text/css">'.
 				spk_redirect_css_image_urls( file_get_contents( get_stylesheet_directory_uri() . '/style_critical_min.css' ) ).
@@ -54,7 +54,7 @@ if ( !is_admin() ) {
 		
 	// ADD NON-CRITICAL STYLING TO THE FOOTER
 	// NOTE: Enqueued scripts are executed at priority level 20
-	add_action( 'wp_footer', 'spk_delay_styling_func', 2 );
+	//add_action( 'wp_footer', 'spk_delay_styling_func', 2 );
 	function spk_delay_styling_func() {
 		echo "<style type='text/css'>".
 				spk_redirect_css_image_urls( file_get_contents( get_stylesheet_directory_uri() . '/style_critical_non_min.css' ) ).
@@ -62,7 +62,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER SCRIPTS/STYLES FROM THE FOOTER
-	add_action( 'wp_footer', 'spk_remove_scripts_styles_footer');
+	//add_action( 'wp_footer', 'spk_remove_scripts_styles_footer');
 	function spk_remove_scripts_styles_footer() {
 		wp_dequeue_style( 'soliloquy-style-css' );
 		wp_deregister_style( 'soliloquy-style-css' );
@@ -76,7 +76,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
-	add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
+	//add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
 	function spk_deregsiter_themes_style_css() {
 	    wp_dequeue_style( 'basic-sass' );
 	    wp_deregister_style( 'basic-sass' );
