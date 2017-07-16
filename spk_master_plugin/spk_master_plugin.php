@@ -207,7 +207,7 @@ function spk_genesis_header_scripts_js_func() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_genesis_footer_scripts_js', 'spk_genesis_footer_scripts_js_func' );
 function spk_genesis_footer_scripts_js_func() {
-	if( spk_validate_user_agents() ) {
+	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
 
 		return "<script> 
 				 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ 
@@ -257,7 +257,7 @@ function spk_genesis_footer_scripts_js_func() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
 function spk_hide_me_from_google_pagespeedinsights() {
-	if( spk_validate_user_agents() ) {
+	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
     	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
 				<!-- Page & Post Article Body Resposive Ad -->
 				<ins class="adsbygoogle"
@@ -278,7 +278,7 @@ function spk_hide_me_from_google_pagespeedinsights() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_google_suggested_articles_js', 'spk_hide_me_from_google_pagespeedinsights_2' );
 function spk_hide_me_from_google_pagespeedinsights_2() {
-	if( spk_validate_user_agents() ) {
+	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
     	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
 				<ins class="adsbygoogle"
 				     style="display:block"
@@ -296,7 +296,7 @@ function spk_hide_me_from_google_pagespeedinsights_2() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
-	if( spk_validate_user_agents() ) {
+	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
 		return '<script src="'.plugins_url( "/js_external/amazon_marketplace.js", __FILE__ ).'"></script>';
 	}
 }
@@ -304,14 +304,18 @@ function spk_amazon_market_place_func() {
 /* --------------------------------------------------------------------------------------------
  * | Function to hide scripts from bots
  * ----------------------------------------------------------------------------------------- */
-function spk_validate_user_agents() {
+/*function spk_validate_user_agents() {
 	$agents = array( 'GTmetrix', 'Google Page Speed Insights' );
-	foreach ($agents as $value) {
+	/ *foreach ($agents as $value) {
 		if( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) == FALSE ) {
 			return TRUE;
 		}
+	}* /
+
+	if( in_array( $_SERVER['HTTP_USER_AGENT'], $agents ) ) {
+		return FALSE;
 	}
-}
+}*/
 
 /* --------------------------------------------------------------------------------------------
  * | Signature Shortcode
