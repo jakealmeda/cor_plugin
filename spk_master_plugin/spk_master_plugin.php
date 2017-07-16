@@ -308,7 +308,7 @@ function spk_validate_user_agents() {
 	$agents = array( 'GTmetrix', 'Google Page Speed Insights' );
 	foreach ($agents as $value) {
 		if( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) == FALSE ) {
-			return FALSE;
+			return TRUE;
 		}
 	}
 }
