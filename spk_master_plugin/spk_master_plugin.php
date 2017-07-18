@@ -86,7 +86,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
-	add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
+	//add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
 	function spk_deregsiter_themes_style_css() {
 		$child_theme_style_id = str_replace( ' ', '-', strtolower( CHILD_THEME_NAME ) );
 	    wp_dequeue_style( $child_theme_style_id );
