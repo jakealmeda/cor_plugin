@@ -86,7 +86,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
-	add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
+	//add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
 	function spk_deregsiter_themes_style_css() {
 		$child_theme_style_id = str_replace( ' ', '-', strtolower( CHILD_THEME_NAME ) );
 	    wp_dequeue_style( $child_theme_style_id );
@@ -186,8 +186,7 @@ function spk_download_external_files() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_genesis_header_scripts_js', 'spk_genesis_header_scripts_js_func' );
 function spk_genesis_header_scripts_js_func() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
-
+	if( spk_bot_detected() ) {
 		return '<meta name="p:domain_verify" content="0a4ace3e1ac7c1854a32de7541879163"/>
 				
 				<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
@@ -207,8 +206,7 @@ function spk_genesis_header_scripts_js_func() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_genesis_footer_scripts_js', 'spk_genesis_footer_scripts_js_func' );
 function spk_genesis_footer_scripts_js_func() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
-
+	if( spk_bot_detected() ) {
 		return "<script> 
 				 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ 
 				 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), 
@@ -257,7 +255,7 @@ function spk_genesis_footer_scripts_js_func() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
 function spk_hide_me_from_google_pagespeedinsights() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_bot_detected() ) {
     	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
 				<!-- Page & Post Article Body Resposive Ad -->
 				<ins class="adsbygoogle"
@@ -278,7 +276,7 @@ function spk_hide_me_from_google_pagespeedinsights() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_google_suggested_articles_js', 'spk_hide_me_from_google_pagespeedinsights_2' );
 function spk_hide_me_from_google_pagespeedinsights_2() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_bot_detected() ) {
     	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
 				<ins class="adsbygoogle"
 				     style="display:block"
@@ -296,7 +294,8 @@ function spk_hide_me_from_google_pagespeedinsights_2() {
  * ----------------------------------------------------------------------------------------- */
 add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
-	if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	//if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
+	if( spk_bot_detected() ) {
 		return '<script src="'.plugins_url( "/js_external/amazon_marketplace.js", __FILE__ ).'"></script>';
 	}
 }
@@ -304,18 +303,24 @@ function spk_amazon_market_place_func() {
 /* --------------------------------------------------------------------------------------------
  * | Function to hide scripts from bots
  * ----------------------------------------------------------------------------------------- */
-/*function spk_validate_user_agents() {
-	$agents = array( 'GTmetrix', 'Google Page Speed Insights' );
-	/ *foreach ($agents as $value) {
-		if( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) == FALSE ) {
-			return TRUE;
-		}
-	}* /
+function spk_bot_detected() {
+	$x=0;	
 
-	if( in_array( $_SERVER['HTTP_USER_AGENT'], $agents ) ) {
-		return FALSE;
+	$agents = array(
+				'Google Page Speed Insights', 	// Google
+				'Gecko/20100101', 				// GTmetrix
+			);
+
+	foreach ($agents as $value) {
+		if( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) == FALSE ) {
+			$x++;
+		}
 	}
-}*/
+
+	if( $x == count( $agents ) ) {
+		return TRUE;
+	}
+}
 
 /* --------------------------------------------------------------------------------------------
  * | Signature Shortcode
