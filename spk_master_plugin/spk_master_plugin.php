@@ -42,7 +42,8 @@ if ( !is_admin() ) {
     add_action( 'wp_head', 'cor_critical_styling', 10 );
 	function cor_critical_styling() {
 		// check if critical style file exists
-		$spk_style_critical = get_stylesheet_directory() . '/style_critical_min.css';
+		//$spk_style_critical = get_stylesheet_directory() . '/style_critical_min.css';
+		$spk_style_critical = get_stylesheet_directory() . '/style_min.css';
 		if( file_exists( $spk_style_critical ) ) {
 			$spk_verified = 1;
 			$spk_style_critical = spk_redirect_css_image_urls( file_get_contents( $spk_style_critical ) );
@@ -63,13 +64,13 @@ if ( !is_admin() ) {
 		
 	// ADD NON-CRITICAL STYLING TO THE FOOTER
 	// NOTE: Enqueued scripts are executed at priority level 20
-	add_action( 'wp_footer', 'spk_delay_styling_func', 2 );
+	/*add_action( 'wp_footer', 'spk_delay_styling_func', 2 );
 	function spk_delay_styling_func() {
 		$spk_style_critical_non = get_stylesheet_directory() . '/style_critical_non_min.css';
 		if( file_exists( $spk_style_critical_non ) ) {
 			echo "<style type='text/css'>".spk_redirect_css_image_urls( file_get_contents( $spk_style_critical_non ) )."</style>";	
 		}
-	}
+	}*/
 
 	// DEREGISTER SCRIPTS/STYLES FROM THE FOOTER
 	add_action( 'wp_footer', 'spk_remove_scripts_styles_footer');
@@ -86,7 +87,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
-	//add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
+	add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
 	function spk_deregsiter_themes_style_css() {
 		$child_theme_style_id = str_replace( ' ', '-', strtolower( CHILD_THEME_NAME ) );
 	    wp_dequeue_style( $child_theme_style_id );
@@ -107,6 +108,9 @@ if ( !is_admin() ) {
 		}
 		return $html;
 	}
+
+	// Enable the use of shortcodes in text widgets.
+	//add_filter( 'widget_text', 'do_shortcode' );
 
 	// DISPLAY JAVASCRIPT HANDLERS (REGISTERED NAMES)
 	/*add_action( 'wp_print_scripts', 'wsds_detect_enqueued_scripts' );
@@ -154,7 +158,7 @@ function spk_download_external_files() {
 		'amazon_marketplace' 	=> 'http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=9f2cb097-ecee-468c-b007-0b4fcd5a22c9',
 		'adsbygoogle' 			=> 'http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
 		'google_analytics' 		=> 'https://www.google-analytics.com/analytics.js',
-		'addthis_js'			=> 'http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5580891d2117b457'
+		'addthis'				=> 'http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5580891d2117b457'
 		); //		'osd' 					=> 'https://pagead2.googlesyndication.com/pagead/osd.js',
 
 	// set directory
@@ -165,14 +169,14 @@ function spk_download_external_files() {
 		
 		// set filename
 		$filename = $spk_file_dir.$key.'.js';
-
+		
 		// change file if the age is more than an hour (insures the local file is updated)
 		if( file_exists( $filename ) ) {
 			// get file's age
-	    	$spk_filename_age = time() - strtotime( filemtime( $filename ) );
+	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
 		}
 
-    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
+    	if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
     		file_put_contents( $filename, file_get_contents( $value ) );
     	}
 
