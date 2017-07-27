@@ -87,7 +87,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
-	add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
+	//add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
 	function spk_deregsiter_themes_style_css() {
 		$child_theme_style_id = str_replace( ' ', '-', strtolower( CHILD_THEME_NAME ) );
 	    wp_dequeue_style( $child_theme_style_id );
@@ -270,8 +270,7 @@ function spk_genesis_footer_scripts_js_func() {
 add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
 function spk_hide_me_from_google_pagespeedinsights() {
 	if( spk_bot_detected() ) {
-    	return '<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>
-				<!-- Page & Post Article Body Resposive Ad -->
+    	return '<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>				<!-- Page & Post Article Body Resposive Ad -->
 				<ins class="adsbygoogle"
 				     style="display:block"
 				     data-ad-client="ca-pub-0947746501358966"
@@ -310,8 +309,7 @@ add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
 	//if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
 	if( spk_bot_detected() ) {
-		return '<script src='.json_encode( plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js", JSON_HEX_TAG).'></script>';
-	}
+		return '<script src='.json_encode( plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js", JSON_HEX_TAG).'></script>';	}
 }
 
 /* --------------------------------------------------------------------------------------------
@@ -319,7 +317,6 @@ function spk_amazon_market_place_func() {
  * ----------------------------------------------------------------------------------------- */
 function spk_bot_detected() {
 	/*$x=0;	
-
 	$agents = array(
 				'Google Page Speed Insights', 	// Google
 				'Gecko/20100101', 				// GTmetrix
@@ -334,6 +331,7 @@ function spk_bot_detected() {
 	if( $x == count( $agents ) ) {
 		return TRUE;
 	}*/return TRUE;
+
 }
 
 /* --------------------------------------------------------------------------------------------
