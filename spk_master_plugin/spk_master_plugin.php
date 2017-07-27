@@ -98,7 +98,7 @@ if ( !is_admin() ) {
 	spk_download_external_files();
 
 	// ALLOW PHP TO EXECUTE IN WIDGETS
-	add_filter( 'widget_text', 'php_execute', 100 );
+	//add_filter( 'widget_text', 'php_execute', 100 );
 	function php_execute( $html ) {
 		if( strpos( $html, "<"."?php" ) !== false ) {
 			ob_start();
@@ -110,7 +110,7 @@ if ( !is_admin() ) {
 	}
 
 	// Enable the use of shortcodes in text widgets.
-	//add_filter( 'widget_text', 'do_shortcode' );
+	add_filter( 'widget_text', 'do_shortcode' );
 
 	// DISPLAY JAVASCRIPT HANDLERS (REGISTERED NAMES)
 	/*add_action( 'wp_print_scripts', 'wsds_detect_enqueued_scripts' );
@@ -129,9 +129,16 @@ if ( !is_admin() ) {
  * ----------------------------------------------------------------------------------------- */
 function spk_redirect_css_image_urls( $value ) {
 
+	// images
 	$value = str_replace( 'images/', get_stylesheet_directory_uri().'/images/', $value );
 	$value = str_replace( "'images/", "'".get_stylesheet_directory_uri()."/images/", $value );
 	$value = str_replace( '"images/', '"'.get_stylesheet_directory_uri().'/images/', $value );
+
+	// fonts
+	$value = str_replace( 'fonts/', get_stylesheet_directory_uri().'/fonts/', $value );
+	$value = str_replace( "'fonts/", "'".get_stylesheet_directory_uri()."/fonts/", $value );
+	$value = str_replace( '"fonts/', '"'.get_stylesheet_directory_uri().'/fonts/', $value );
+
 	return $value;
 
 }
@@ -175,10 +182,13 @@ function spk_download_external_files() {
 			// get file's age
 	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
 		}
-
-    	if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
+		
+    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
+    		//echo $filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
     		file_put_contents( $filename, file_get_contents( $value ) );
-    	}
+    	}/* else {
+    		echo ' ----- '.$filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    	}*/
 
 	}
 }
@@ -193,7 +203,7 @@ function spk_genesis_header_scripts_js_func() {
 	if( spk_bot_detected() ) {
 		return '<meta name="p:domain_verify" content="0a4ace3e1ac7c1854a32de7541879163"/>
 				
-				<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
+				<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>
 				<script>
 				  (adsbygoogle = window.adsbygoogle || []).push({
 				    google_ad_client: "ca-pub-0947746501358966",
@@ -216,7 +226,7 @@ function spk_genesis_footer_scripts_js_func() {
 				 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), 
 				 
 				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) 
-				 })(window,document,'script','".plugins_url( '/js_external/google_analytics.js', __FILE__ )."','ga'); 
+				 })(window,document,'script',".json_encode( plugin_dir_url( __FILE__ ).'js_external/adsbygoogle.js', JSON_HEX_TAG).",'ga'); 
 				 ga('create', 'UA-556922-1', 'auto'); 
 				 ga('send', 'pageview'); 
 				</script>
@@ -243,7 +253,7 @@ function spk_genesis_footer_scripts_js_func() {
 				  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 				  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 				  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-				  })(window,document,'script','".plugins_url( '/js_external/google_analytics.js', __FILE__ )."','ga');
+				  })(window,document,'script',".json_encode( plugin_dir_url( __FILE__ ).'js_external/google_analytics.js', JSON_HEX_TAG).",'ga');
 
 				  ga('create', 'UA-90942410-1', 'auto');
 				  ga('send', 'pageview');
@@ -260,7 +270,7 @@ function spk_genesis_footer_scripts_js_func() {
 add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
 function spk_hide_me_from_google_pagespeedinsights() {
 	if( spk_bot_detected() ) {
-    	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
+    	return '<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>
 				<!-- Page & Post Article Body Resposive Ad -->
 				<ins class="adsbygoogle"
 				     style="display:block"
@@ -281,7 +291,7 @@ function spk_hide_me_from_google_pagespeedinsights() {
 add_shortcode( 'spk_google_suggested_articles_js', 'spk_hide_me_from_google_pagespeedinsights_2' );
 function spk_hide_me_from_google_pagespeedinsights_2() {
 	if( spk_bot_detected() ) {
-    	return '<script async src="'.plugins_url( "/js_external/adsbygoogle.js", __FILE__ ).'"></script>
+    	return '<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>
 				<ins class="adsbygoogle"
 				     style="display:block"
 				     data-ad-format="autorelaxed"
@@ -300,7 +310,7 @@ add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
 	//if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
 	if( spk_bot_detected() ) {
-		return '<script src="'.plugins_url( "/js_external/amazon_marketplace.js", __FILE__ ).'"></script>';
+		return '<script src='.json_encode( plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js", JSON_HEX_TAG).'></script>';
 	}
 }
 
@@ -308,7 +318,7 @@ function spk_amazon_market_place_func() {
  * | Function to hide scripts from bots
  * ----------------------------------------------------------------------------------------- */
 function spk_bot_detected() {
-	$x=0;	
+	/*$x=0;	
 
 	$agents = array(
 				'Google Page Speed Insights', 	// Google
@@ -323,7 +333,7 @@ function spk_bot_detected() {
 
 	if( $x == count( $agents ) ) {
 		return TRUE;
-	}
+	}*/return TRUE;
 }
 
 /* --------------------------------------------------------------------------------------------
@@ -357,7 +367,7 @@ function spk_masterplug_js_scripts() {
  * INCLUDE OTHER PLUGIN FILES
  * ------------------------------------------------------------------------- */
 // quotes
-require_once( 'codec/spk_quotes.php' );
+//require_once( 'codec/spk_quotes.php' );
 // youtube embed, social toolbar and dynamic div transfer
 require_once( 'codec/spk_master_plug_v1.php' );
 // get permalink
