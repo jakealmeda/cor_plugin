@@ -43,7 +43,7 @@ if ( !is_admin() ) {
 	function cor_critical_styling() {
 		// check if critical style file exists
 		//$spk_style_critical = get_stylesheet_directory() . '/style_critical_min.css';
-		$spk_style_critical = get_stylesheet_directory() . '/style_min.css';
+		$spk_style_critical = get_stylesheet_directory() . '/style-min.css';
 		if( file_exists( $spk_style_critical ) ) {
 			$spk_verified = 1;
 			$spk_style_critical = spk_redirect_css_image_urls( file_get_contents( $spk_style_critical ) );
