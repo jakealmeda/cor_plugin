@@ -35,15 +35,8 @@ function su_youtube_advanced_func( $atts ) {
         $secured = 'http';
     }
 
-    // retrieve thumbnail from source (youtube) and save it locally
-    $spk_file_dir = dirname(__FILE__).'/../images/youtubethumbs/0/';
-    if( !file_exists( $spk_file_dir.$youtubeid.'.jpg' ) ) {
-        // download thumbnail
-        spk_download_youtube_thumb( $spk_file_dir, $youtubeid );
-    } else {
-        // file exists - check the age and replace if older than 2 weeks
-        spk_check_youtube_thumb_age( $spk_file_dir, $youtubeid );
-    }
+    // download thumbnail
+    spk_download_youtube_thumb( $youtubeid );
 
     //                         <!--img src="'.$secured.'://img.youtube.com/vi/'.$youtubeid.'/0.jpg" class="thumbnail" id="thumbnail_'.$youtubeid.'" / -->
     $return = '<div class="module-video" id="'.$youtubeid.'">
@@ -58,37 +51,30 @@ function su_youtube_advanced_func( $atts ) {
 }
 
 /* --------------------------------------------------------------------------------------------
- * | CHECK THUMBNAIL AGE
- * ----------------------------------------------------------------------------------------- */
-function spk_check_youtube_thumb_age( $spk_file_dir, $youtubeid ) {
-
-    // max file life time is 2 weeks ( 1 hour is 3600 seconds )
-    $spk_timer = time() - strtotime( '-2 weeks' );
-
-    // set file name
-    $filename = $spk_file_dir.$youtubeid.'.jpg';
-
-    // get the file's age
-    $spk_filename_age = time() - strtotime( filemtime( $filename ) );
-
-    if ( $spk_filename_age > $spk_timer ) {
-        // replace
-        spk_download_youtube_thumb( $spk_file_dir, $youtubeid );
-    }
-
-    return true;
-
-}
-
-/* --------------------------------------------------------------------------------------------
  * | DOWNLOAD YOUTUBE THUMBNAIL
  * ----------------------------------------------------------------------------------------- */
-function spk_download_youtube_thumb( $spk_file_dir, $youtubeid ) {
+function spk_download_youtube_thumb( $youtubeid ) {
 
-    $true = file_put_contents( $spk_file_dir.$youtubeid.'.jpg', file_get_contents( 'https://img.youtube.com/vi/'.$youtubeid.'/0.jpg' ) );
-    if( $true ) {
-        return true;
+    $spk_file_dir = plugin_dir_path( __FILE__ ).'../images/youtubethumbs/0/';
+        
+    // set filename
+    $filename = $spk_file_dir.$youtubeid.'.jpg';
+
+    // set source
+    $source = 'https://img.youtube.com/vi/'.$youtubeid.'/0.jpg';
+    
+    // change file if the age is more than an hour (insures the local file is updated)
+    if( file_exists( $filename ) ) {
+        // get file's age
+        $spk_filename_age = time() - strtotime( filectime( $filename ) );
     }
+    
+    if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
+        //echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
+        file_put_contents( $filename, file_get_contents( $source ) );
+    }/* else {
+        echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    }*/
 
 }
 
@@ -189,8 +175,8 @@ function swps_st_externals() {
             </div>
             <div class="divider-line clearfix space-vertical-half"></div>
             <div class="media">
-            <div class="media-img"><a class="item-icon icon-amazon" href="<?php echo get_permalink( spk_master_get_post_id( 'amazon' ) ); ?>"></a></div>
-            <div class="media-bd"><a href="<?php echo get_permalink( spk_master_get_post_id( 'amazon' ) ); ?>"><h5>Self-Help Products, Books, Supplements, Etc. I Recommend</h5></a></div>
+            <div class="media-img"><a class="item-icon icon-amazon" href="<?php echo get_permalink( '22910' ); ?>"></a></div>
+            <div class="media-bd"><a href="<?php echo get_permalink( '22910' ); ?>"><h5>Self-Help Products, Books, Supplements, Etc. I Recommend</h5></a></div>
             </div>
         </div>
     </div>
@@ -245,8 +231,8 @@ function swps_st_externals() {
             </div>
             <div class="divider-line clearfix space-vertical-half"></div>
             <div class="media">
-            <div class="media-img media-right"><a class="item-icon icon-amazon" href="<?php echo get_permalink( spk_master_get_post_id( 'amazon' ) ); ?>"></a></div>
-            <div class="media-bd"><a href="<?php echo get_permalink( spk_master_get_post_id( 'amazon' ) ); ?>"><h5>Self-Help Products, Books, Supplements, Etc. I Recommend</h5></a></div>
+            <div class="media-img media-right"><a class="item-icon icon-amazon" href="<?php echo get_permalink( '22910' ); ?>"></a></div>
+            <div class="media-bd"><a href="<?php echo get_permalink( '22910' ); ?>"><h5>Self-Help Products, Books, Supplements, Etc. I Recommend</h5></a></div>
             </div>
             <div class="divider-line clearfix space-vertical-half"></div>
             <div class="media">

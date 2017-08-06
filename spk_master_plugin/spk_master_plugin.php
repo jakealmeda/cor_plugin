@@ -43,7 +43,7 @@ if ( !is_admin() ) {
 	function cor_critical_styling() {
 		// check if critical style file exists
 		//$spk_style_critical = get_stylesheet_directory() . '/style_critical_min.css';
-		$spk_style_critical = get_stylesheet_directory() . '/style_min.css';
+		$spk_style_critical = get_stylesheet_directory() . '/style-min.css';
 		if( file_exists( $spk_style_critical ) ) {
 			$spk_verified = 1;
 			$spk_style_critical = spk_redirect_css_image_urls( file_get_contents( $spk_style_critical ) );
@@ -87,7 +87,7 @@ if ( !is_admin() ) {
 	}
 
 	// DEREGISTER CHILD THEME'S STYLE.CSS - it doesn't contain any styling and is classified by google as a render-blocking css
-	//add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
+	add_action( 'wp_enqueue_scripts', 'spk_deregsiter_themes_style_css' );
 	function spk_deregsiter_themes_style_css() {
 		$child_theme_style_id = str_replace( ' ', '-', strtolower( CHILD_THEME_NAME ) );
 	    wp_dequeue_style( $child_theme_style_id );
@@ -169,7 +169,8 @@ function spk_download_external_files() {
 		); //		'osd' 					=> 'https://pagead2.googlesyndication.com/pagead/osd.js',
 
 	// set directory
-	$spk_file_dir = dirname(__FILE__).'/js_external/';
+	//$spk_file_dir = dirname(__FILE__).'/js_external/';
+	$spk_file_dir = plugin_dir_path( __FILE__ ).'js_external/';
 
 	// loop through each entry
 	foreach( $spk_externals as $key => $value ) {
@@ -183,12 +184,12 @@ function spk_download_external_files() {
 	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
 		}
 		
-    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
-    		//echo $filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
-    		file_put_contents( $filename, file_get_contents( $value ) );
-    	}/* else {
-    		echo ' ----- '.$filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
-    	}*/
+    if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
+      //echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
+      file_put_contents( $filename, file_get_contents( $value ) );
+    }/* else {
+      echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    }*/
 
 	}
 }
@@ -374,3 +375,5 @@ require_once( 'codec/spk_get_permalink.php' );
 //require_once( 'codec/spk_sessions.php' );
 // shortcode ultimate remnant
 require_once( 'codec/spk_sc_get_post_content.php' );
+// hardcoded shortcodes
+require_once( 'more_shortcodes.php' );
