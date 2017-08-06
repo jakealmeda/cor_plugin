@@ -169,7 +169,8 @@ function spk_download_external_files() {
 		); //		'osd' 					=> 'https://pagead2.googlesyndication.com/pagead/osd.js',
 
 	// set directory
-	$spk_file_dir = dirname(__FILE__).'/js_external/';
+	//$spk_file_dir = dirname(__FILE__).'/js_external/';
+	$spk_file_dir = plugin_dir_path( __FILE__ ).'js_external/';
 
 	// loop through each entry
 	foreach( $spk_externals as $key => $value ) {
@@ -183,11 +184,11 @@ function spk_download_external_files() {
 	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
 		}
 		
-    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
-    		//echo $filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    	if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
+    		//echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
     		file_put_contents( $filename, file_get_contents( $value ) );
     	}/* else {
-    		echo ' ----- '.$filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    		echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
     	}*/
 
 	}
