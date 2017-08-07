@@ -165,7 +165,8 @@ function spk_download_external_files() {
 		'amazon_marketplace' 	=> 'http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=9f2cb097-ecee-468c-b007-0b4fcd5a22c9',
 		'adsbygoogle' 			=> 'http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
 		'google_analytics' 		=> 'https://www.google-analytics.com/analytics.js',
-		'addthis'				=> 'http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5580891d2117b457'
+		'addthis'				=> 'http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5580891d2117b457',
+		'fbds'					=> 'https://connect.facebook.net/en_US/fbds.js',
 		); //		'osd' 					=> 'https://pagead2.googlesyndication.com/pagead/osd.js',
 
 	// set directory
@@ -184,166 +185,14 @@ function spk_download_external_files() {
 	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
 		}
 		
-    if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
-      //echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
-      file_put_contents( $filename, file_get_contents( $value ) );
-    }/* else {
-      echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
-    }*/
+    	if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
+    		//echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    		file_put_contents( $filename, file_get_contents( $value ) );
+    	}/* else {
+    		echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    	}*/
 
 	}
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Genesis Header Scripts
- * | --------------
- * | REGISTER SHORTCODE TO HIDE GOOGLE'S OWN SCRIPTS FROM BEING TAGGED BY THEM
- * ----------------------------------------------------------------------------------------- */
-add_shortcode( 'spk_genesis_header_scripts_js', 'spk_genesis_header_scripts_js_func' );
-function spk_genesis_header_scripts_js_func() {
-	if( spk_bot_detected() ) {
-		return '<meta name="p:domain_verify" content="0a4ace3e1ac7c1854a32de7541879163"/>
-				
-				<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>
-				<script>
-				  (adsbygoogle = window.adsbygoogle || []).push({
-				    google_ad_client: "ca-pub-0947746501358966",
-				    enable_page_level_ads: true
-				  });
-				</script>';
-	}
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Genesis Footer Scripts
- * | --------------
- * | REGISTER SHORTCODE TO HIDE GOOGLE'S OWN SCRIPTS FROM BEING TAGGED BY THEM
- * ----------------------------------------------------------------------------------------- */
-add_shortcode( 'spk_genesis_footer_scripts_js', 'spk_genesis_footer_scripts_js_func' );
-function spk_genesis_footer_scripts_js_func() {
-	if( spk_bot_detected() ) {
-		return "<script> 
-				 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ 
-				 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), 
-				 
-				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) 
-				 })(window,document,'script',".json_encode( plugin_dir_url( __FILE__ ).'js_external/adsbygoogle.js', JSON_HEX_TAG).",'ga'); 
-				 ga('create', 'UA-556922-1', 'auto'); 
-				 ga('send', 'pageview'); 
-				</script>
-
-				<script>(function() {
-				  var _fbq = window._fbq || (window._fbq = []);
-				  if (!_fbq.loaded) {
-				    var fbds = document.createElement('script');
-				    fbds.async = true;
-				    fbds.src = '//connect.facebook.net/en_US/fbds.js';
-				    var s = document.getElementsByTagName('script')[0];
-				    s.parentNode.insertBefore(fbds, s);
-				    _fbq.loaded = true;
-				  }
-				  _fbq.push(['addPixelId', '342285032648063']);
-				})();
-				window._fbq = window._fbq || [];
-				window._fbq.push(['track', 'PixelInitialized', {}]);
-				</script>
-				<noscript><img height='1' width='1' alt='' style='display:none' src='https://www.facebook.com/tr?id=342285032648063&amp;ev=PixelInitialized' /></noscript>
-
-
-				<script>
-				  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-				  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-				  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-				  })(window,document,'script',".json_encode( plugin_dir_url( __FILE__ ).'js_external/google_analytics.js', JSON_HEX_TAG).",'ga');
-
-				  ga('create', 'UA-90942410-1', 'auto');
-				  ga('send', 'pageview');
-
-				</script>";
-	}
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Widget entry
- * | --------------
- * | REGISTER SHORTCODE TO HIDE GOOGLE'S OWN SCRIPTS FROM BEING TAGGED BY THEM
- * ----------------------------------------------------------------------------------------- */
-add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
-function spk_hide_me_from_google_pagespeedinsights() {
-	if( spk_bot_detected() ) {
-    	return '<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>				<!-- Page & Post Article Body Resposive Ad -->
-				<ins class="adsbygoogle"
-				     style="display:block"
-				     data-ad-client="ca-pub-0947746501358966"
-				     data-ad-slot="7597430493"
-				     data-ad-format="auto"></ins>
-				<script>
-				(adsbygoogle = window.adsbygoogle || []).push({});
-				</script>';
-	}
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Widget entry
- * | --------------
- * | REGISTER SHORTCODE TO HIDE GOOGLE'S OWN SCRIPTS FROM BEING TAGGED BY THEM - 2
- * ----------------------------------------------------------------------------------------- */
-add_shortcode( 'spk_google_suggested_articles_js', 'spk_hide_me_from_google_pagespeedinsights_2' );
-function spk_hide_me_from_google_pagespeedinsights_2() {
-	if( spk_bot_detected() ) {
-    	return '<script async src='.json_encode( plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js", JSON_HEX_TAG).'></script>
-				<ins class="adsbygoogle"
-				     style="display:block"
-				     data-ad-format="autorelaxed"
-				     data-ad-client="ca-pub-0947746501358966"
-				     data-ad-slot="2135583692"></ins>
-				<script>
-				     (adsbygoogle = window.adsbygoogle || []).push({});
-				</script>';
-	}
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Putting the Amazon scripts here to test if we can enqueue the scripts properly
- * ----------------------------------------------------------------------------------------- */
-add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
-function spk_amazon_market_place_func() {
-	//if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
-	if( spk_bot_detected() ) {
-		return '<script src='.json_encode( plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js", JSON_HEX_TAG).'></script>';	}
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Function to hide scripts from bots
- * ----------------------------------------------------------------------------------------- */
-function spk_bot_detected() {
-	/*$x=0;	
-	$agents = array(
-				'Google Page Speed Insights', 	// Google
-				'Gecko/20100101', 				// GTmetrix
-			);
-
-	foreach ($agents as $value) {
-		if( strpos( $_SERVER['HTTP_USER_AGENT'], $value ) == FALSE ) {
-			$x++;
-		}
-	}
-
-	if( $x == count( $agents ) ) {
-		return TRUE;
-	}*/return TRUE;
-
-}
-
-/* --------------------------------------------------------------------------------------------
- * | Signature Shortcode
- * | --------------
- * | THIS SHORTCODE SIMPLY RETURNS THE CURRENT SITE ADDRESS
- * | BEST USED FOR IMAGES STORED IN THE SERVER WHICH CAN'T BE ACCESSED WITHIN WORDPRESS
- * ----------------------------------------------------------------------------------------- */
-add_shortcode( 'spk_site_url', 'spk_site_url_func' );
-function spk_site_url_func() {
-	return site_url();
 }
 
 /* --------------------------------------------------------------------------------------------
