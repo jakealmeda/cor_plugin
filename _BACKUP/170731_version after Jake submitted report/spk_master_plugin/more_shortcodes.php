@@ -37,7 +37,7 @@ function spk_genesis_footer_scripts_js_func() {
 				 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), 
 				 
 				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) 
-         })(window,document,'script',".json_encode( plugin_dir_url( __FILE__ ).'js_external/google_analytics.js', JSON_HEX_TAG).",'ga'); 
+				 })(window,document,'script',".json_encode( plugin_dir_url( __FILE__ ).'js_external/adsbygoogle.js', JSON_HEX_TAG).",'ga'); 
 				 ga('create', 'UA-556922-1', 'auto'); 
 				 ga('send', 'pageview'); 
 				</script>
@@ -47,7 +47,7 @@ function spk_genesis_footer_scripts_js_func() {
 				  if (!_fbq.loaded) {
 				    var fbds = document.createElement('script');
 				    fbds.async = true;
-            fbds.src = ".json_encode( plugin_dir_url( __FILE__ ).'js_external/fbds.js', JSON_HEX_TAG).";
+				    fbds.src = '//connect.facebook.net/en_US/fbds.js';
 				    var s = document.getElementsByTagName('script')[0];
 				    s.parentNode.insertBefore(fbds, s);
 				    _fbq.loaded = true;

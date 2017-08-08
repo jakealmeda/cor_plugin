@@ -1,0 +1,7 @@
+[26-Jul-2017 23:22:37 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
+[26-Jul-2017 23:23:07 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
+[27-Jul-2017 03:47:55 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
+[27-Jul-2017 10:48:46 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
+[27-Jul-2017 13:17:46 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
+[27-Jul-2017 14:18:17 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
+[27-Jul-2017 15:18:17 UTC] PHP Fatal error:  Cannot use object of type WP_Error as array in /home/smksite/cor.smartwebpackages.com/updated/wp-content/plugins/spk_master_plugin/ajax/spk_quotes_query.php on line 33
