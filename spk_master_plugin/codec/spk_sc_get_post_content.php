@@ -14,9 +14,11 @@ function su_post_func( $atts ) {
         'post_id' => 'post_id',
     ), $atts );
 
+    $field =  $a['field'];
+
     $post_data = get_post( $a['post_id'] );
     if ($post_data) {
-        return apply_filters( 'the_content', $post_data->$a['field'] );
+        return apply_filters( 'the_content', $post_data->$field );
     } else {
         return false;
     }
