@@ -13,6 +13,22 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
+/* ----------------------------------------------------------------------------
+ * INCLUDE OTHER PLUGIN FILES
+ * ------------------------------------------------------------------------- */
+// quotes
+//require_once( 'codec/spk_quotes.php' );
+// youtube embed, social toolbar and dynamic div transfer
+require_once( 'codec/spk_master_plug_v1.php' );
+// get permalink
+require_once( 'codec/spk_get_permalink.php' );
+// sessions
+//require_once( 'codec/spk_sessions.php' );
+// shortcode ultimate remnant
+require_once( 'codec/spk_sc_get_post_content.php' );
+// hardcoded shortcodes
+require_once( 'more_shortcodes.php' );
+
 /* --------------------------------------------------------------------------------------------
  * | APPLY HACKS
  * ----------------------------------------------------------------------------------------- */
@@ -185,11 +201,22 @@ function spk_download_external_files() {
 	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
 		}
 		
-    	if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
-    		//echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
-    		file_put_contents( $filename, file_get_contents( $value ) );
+    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
+    		//echo $filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+
+    		$value = file_get_contents( $value );
+
+    		// facebook adds comments in the JS file which is being tagged by Google for minification
+    		if( $key == 'fbds' ) {
+				$value = preg_replace( '!/\*.*?\*/!s', '', $value );
+				$value = preg_replace( '/\n\s*\n/', "\n", $value );
+				$value = preg_replace('/^[ \t]*[\r\n]+/m', '', $value);
+    		}
+
+			file_put_contents( $filename, $value );
+
     	}/* else {
-    		echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    		echo ' ----- '.$filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
     	}*/
 
 	}
@@ -210,19 +237,3 @@ function spk_masterplug_js_scripts() {
 	}
 
 }
-
-/* ----------------------------------------------------------------------------
- * INCLUDE OTHER PLUGIN FILES
- * ------------------------------------------------------------------------- */
-// quotes
-//require_once( 'codec/spk_quotes.php' );
-// youtube embed, social toolbar and dynamic div transfer
-require_once( 'codec/spk_master_plug_v1.php' );
-// get permalink
-require_once( 'codec/spk_get_permalink.php' );
-// sessions
-//require_once( 'codec/spk_sessions.php' );
-// shortcode ultimate remnant
-require_once( 'codec/spk_sc_get_post_content.php' );
-// hardcoded shortcodes
-require_once( 'more_shortcodes.php' );
