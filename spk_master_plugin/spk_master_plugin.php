@@ -218,7 +218,6 @@ function spk_download_external_files() {
     	}/* else {
     		echo ' ----- '.$filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
     	}*/
-
 	}
 }
 
