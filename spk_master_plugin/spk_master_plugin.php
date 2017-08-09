@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * INCLUDE OTHER PLUGIN FILES
  * ------------------------------------------------------------------------- */
 // quotes
-//require_once( 'codec/spk_quotes.php' );
+require_once( 'codec/spk_quotes.php' );
 // youtube embed, social toolbar and dynamic div transfer
 require_once( 'codec/spk_master_plug_v1.php' );
 // get permalink
