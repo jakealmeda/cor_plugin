@@ -65,7 +65,7 @@ function spk_download_youtube_thumb( $youtubeid ) {
     
     $key = NULL; // not really required but just good to have in place
 
-    if( file_exists( $target ) ) {
+    if( file_exists( $filename ) ) {
 
         // validate time stamps
         $start      = date('Y-m-d H:i:s'); 
