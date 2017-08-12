@@ -121,7 +121,7 @@ add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
 	//if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
 	if( spk_bot_detected() ) {
-		return '<script async src="'.plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js".'"></script>';
+		return '<script src="'.plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js".'"></script>';
 	}
 }
 
