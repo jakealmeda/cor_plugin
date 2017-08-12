@@ -61,20 +61,38 @@ function spk_download_youtube_thumb( $youtubeid ) {
     $filename = $spk_file_dir.$youtubeid.'.jpg';
 
     // set source
-    $source = 'https://img.youtube.com/vi/'.$youtubeid.'/0.jpg';
+    $value = 'https://img.youtube.com/vi/'.$youtubeid.'/0.jpg';
     
-    // change file if the age is more than an hour (insures the local file is updated)
-    if( file_exists( $filename ) ) {
-        // get file's age
-        $spk_filename_age = time() - strtotime( filectime( $filename ) );
+    $key = NULL; // not really required but just good to have in place
+
+    if( file_exists( $target ) ) {
+
+        // validate time stamps
+        $start      = date('Y-m-d H:i:s'); 
+        $end        = date('Y-m-d H:i:s',filemtime( $filename )); 
+        $d_start    = new DateTime($start); 
+        $d_end      = new DateTime($end); 
+        $diff       = $d_start->diff($d_end);
+        //var_dump($diff); echo '<hr>';
+
+        $file_age = 14;
+
+        /* $diff->d for days
+         * $diff->h for hours
+         * $diff->i for minutes
+         */
+        if( $diff->d >= $file_age ) {
+            //echo $diff->d.' > '.$file_age.' <br />';
+            spk_download_external_files_now( $filename, $key, $value );
+        }/* else {
+            echo $diff->d.' < '.$file_age.' <br />';
+        }*/
+
+    } else {
+        // file doesn't exists
+        //echo "file doesn't exists.";
+        spk_download_external_files_now( $filename, $key, $value );
     }
-    
-    if( !file_exists( $filename ) || $spk_filename_age < ( time() - strtotime( '-1 hour' ) ) ) {
-        //echo $filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
-        file_put_contents( $filename, file_get_contents( $source ) );
-    }/* else {
-        echo ' ----- '.$filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
-    }*/
 
 }
 
