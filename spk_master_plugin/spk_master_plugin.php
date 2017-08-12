@@ -13,22 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-/* ----------------------------------------------------------------------------
- * INCLUDE OTHER PLUGIN FILES
- * ------------------------------------------------------------------------- */
-// quotes
-require_once( 'codec/spk_quotes.php' );
-// youtube embed, social toolbar and dynamic div transfer
-require_once( 'codec/spk_master_plug_v1.php' );
-// get permalink
-require_once( 'codec/spk_get_permalink.php' );
-// sessions
-//require_once( 'codec/spk_sessions.php' );
-// shortcode ultimate remnant
-require_once( 'codec/spk_sc_get_post_content.php' );
-// hardcoded shortcodes
-require_once( 'more_shortcodes.php' );
-
 /* --------------------------------------------------------------------------------------------
  * | APPLY HACKS
  * ----------------------------------------------------------------------------------------- */
@@ -176,7 +160,7 @@ function spk_redirect_soliloquy_image_urls( $value ) {
  * | FUNCTION TO DOWNLOAD EXTERNAL FILES
  * ----------------------------------------------------------------------------------------- */
 function spk_download_external_files() {
-
+	
 	$spk_externals = array(
 		'amazon_marketplace' 	=> 'http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=9f2cb097-ecee-468c-b007-0b4fcd5a22c9',
 		'adsbygoogle' 			=> 'http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
@@ -195,30 +179,56 @@ function spk_download_external_files() {
 		// set filename
 		$filename = $spk_file_dir.$key.'.js';
 		
-		// change file if the age is more than an hour (insures the local file is updated)
-		if( file_exists( $filename ) ) {
-			// get file's age
-	    	$spk_filename_age = time() - strtotime( filectime( $filename ) );
-		}
-		
-    	if( !file_exists( $filename ) || $spk_filename_age > ( time() - strtotime( '-1 hour' ) ) ) {
-    		//echo $filename.' | '.$spk_filename_age.' > '.( time() - strtotime( '-1 hour' ) ).'<br />';
+    	if( file_exists( $filename ) ) {
 
-    		$value = file_get_contents( $value );
+    		// validate time stamps
+			$start  	= date('Y-m-d H:i:s'); 
+		    $end    	= date('Y-m-d H:i:s',filemtime( $filename )); 
+		    $d_start    = new DateTime($start); 
+		    $d_end      = new DateTime($end); 
+		    $diff 		= $d_start->diff($d_end);
+		    //var_dump($diff); echo '<hr>';
 
-    		// facebook adds comments in the JS file which is being tagged by Google for minification
-    		if( $key == 'fbds' ) {
-				$value = preg_replace( '!/\*.*?\*/!s', '', $value );
-				$value = preg_replace( '/\n\s*\n/', "\n", $value );
-				$value = preg_replace('/^[ \t]*[\r\n]+/m', '', $value);
-    		}
+			$file_age = 1;
 
-			file_put_contents( $filename, $value );
+			/* $diff->d for days
+			 * $diff->h for hours
+			 * $diff->i for minutes
+			 */
+    		if( $diff->h >= $file_age ) {
+    			//echo $diff->i.' > '.$file_age.' <br />';
+    			spk_download_external_files_now( $filename, $key, $value );
+    		}/* else {
+    			echo $diff->i.' < '.$file_age.' <br />';
+    		}*/
 
-    	}/* else {
-    		echo ' ----- '.$filename.' | '.$spk_filename_age.' < '.( time() - strtotime( '-1 hour' ) ).'<br />';
-    	}*/
+    	} else {
+    		// file doesn't exists
+    		//echo "file doesn't exists.";
+    		spk_download_external_files_now( $filename, $key, $value );
+    	}
+
 	}
+}
+
+/* --------------------------------------------------------------------------------------------
+ * | DOWNLOADER FUNCTION
+ * ----------------------------------------------------------------------------------------- */
+function spk_download_external_files_now( $filename, $key, $value ) {
+
+	$value = file_get_contents( $value );
+
+	// facebook's JS is already minified but they added comments in it caused it to be tagged by Google for minification
+	if( $key == 'fbds' ) {
+		$value = preg_replace( '!/\*.*?\*/!s', '', $value );
+		$value = preg_replace( '/\n\s*\n/', "\n", $value );
+		$value = preg_replace('/^[ \t]*[\r\n]+/m', '', $value);
+	}
+
+	if( file_put_contents( $filename, $value ) ) {
+		return TRUE;
+	}
+
 }
 
 /* --------------------------------------------------------------------------------------------
@@ -236,3 +246,19 @@ function spk_masterplug_js_scripts() {
 	}
 
 }
+
+/* ----------------------------------------------------------------------------
+ * INCLUDE OTHER PLUGIN FILES
+ * ------------------------------------------------------------------------- */
+// quotes
+require_once( 'codec/spk_quotes.php' );
+// youtube embed, social toolbar and dynamic div transfer
+require_once( 'codec/spk_master_plug_v1.php' );
+// get permalink
+require_once( 'codec/spk_get_permalink.php' );
+// sessions
+//require_once( 'codec/spk_sessions.php' );
+// shortcode ultimate remnant
+require_once( 'codec/spk_sc_get_post_content.php' );
+// hardcoded shortcodes
+require_once( 'more_shortcodes.php' );
