@@ -262,7 +262,7 @@ function ur_quote_func() {
 function ur_quote_enqueue_our_scripts() {
     // last arg is true - will be placed before </body>
     //wp_enqueue_script( 'ur_quote_js', plugin_dir_url( __FILE__ ).'../js/spk_asset_quotes_min.js', NULL, NULL, TRUE );
-    wp_register_script( 'ur_quote_js', plugins_url( '../js/spk_asset_quotes_min.js', __FILE__ ), NULL, NULL, TRUE );
+    wp_register_script( 'ur_quote_js', plugins_url( '../js/spk_asset_quotes_min.js', __FILE__ ), NULL, '1.0', TRUE );
      
     // Localize the script with new data
     $translation_array = array(
