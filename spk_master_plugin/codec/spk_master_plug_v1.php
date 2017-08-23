@@ -451,7 +451,7 @@ add_action( 'wp_enqueue_scripts', 'spk_theme_skrips');
 function spk_mpv_one_enqueue_our_scripts() {
     // last arg is true - will be placed before </body>
     //wp_enqueue_script( 'spk_master_plugins_v1_js', plugins_url( '../js/spk_asset_master_plug_v1_min.js', __FILE__ ), NULL, NULL, true );
-    wp_register_script( 'spk_master_plugins_v1_js', plugins_url( '../js/spk_asset_master_plug_v1_min.js', __FILE__ ), NULL, NULL, TRUE );
+    wp_register_script( 'spk_master_plugins_v1_js', plugins_url( '../js/spk_asset_master_plug_v1_min.js', __FILE__ ), NULL, '1.0', TRUE );
      
     // Localize the script with new data
     $translation_array = array(
