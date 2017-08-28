@@ -128,17 +128,22 @@ if ( !is_admin() ) {
  * | INSTEAD OF images/name.jpg, it should be changed to FULL-URL/themes/images/name.jpg
  * ----------------------------------------------------------------------------------------- */
 function spk_redirect_css_image_urls( $value ) {
-
+	
 	// images
 	$value = str_replace( 'images/', get_stylesheet_directory_uri().'/images/', $value );
 	$value = str_replace( "'images/", "'".get_stylesheet_directory_uri()."/images/", $value );
 	$value = str_replace( '"images/', '"'.get_stylesheet_directory_uri().'/images/', $value );
+
+	// add version
+	$value = spk_add_timestamps( get_stylesheet_directory().'/images/', get_stylesheet_directory_uri().'/images/', $value, spk_images_in_styles() );
 
 	// fonts
 	$value = str_replace( 'fonts/', get_stylesheet_directory_uri().'/fonts/', $value );
 	$value = str_replace( "'fonts/", "'".get_stylesheet_directory_uri()."/fonts/", $value );
 	$value = str_replace( '"fonts/', '"'.get_stylesheet_directory_uri().'/fonts/', $value );
 
+	// add version
+	//return spk_add_timestamps( get_stylesheet_directory_uri().'/fonts/', $value );
 	return $value;
 
 }
@@ -152,8 +157,23 @@ function spk_redirect_soliloquy_image_urls( $value ) {
 	$value = str_replace( 'images/', plugins_url().'/soliloquy/assets/css/images/', $value );
 	$value = str_replace( "'images/", "'".plugins_url()."/soliloquy/assets/css/images/", $value );
 	$value = str_replace( '"images/', '"'.plugins_url().'/soliloquy/assets/css/images/', $value );
+
+	// add version
+	$value = spk_add_timestamps( plugin_dir_path( __FILE__ ).'../soliloquy/assets/css/images/', plugins_url().'/soliloquy/assets/css/images/', $value, spk_images_in_soliloquy() );
+
 	return $value;
 
+}
+
+/* --------------------------------------------------------------------------------------------
+ * | GET THE FILE'S TIMESTAMP AND APPEND IT AFTER THE FILE EXTENSION
+ * ----------------------------------------------------------------------------------------- */
+function spk_add_timestamps( $path_dir, $path_url, $value, $array ){
+	foreach( $array as $val ) {
+		//echo $path_url.''.$val.' == '.date( 'Y-m-d H:i:s', filemtime( $path_dir.$val ) ).'<br />'; 
+		$value = str_replace( $path_url.$val, $path_url.$val.'?ver='.date( 'YmdHis', filemtime( $path_dir.$val ) ), $value );
+	}
+	return $value;
 }
 
 /* --------------------------------------------------------------------------------------------
@@ -262,3 +282,5 @@ require_once( 'codec/spk_get_permalink.php' );
 require_once( 'codec/spk_sc_get_post_content.php' );
 // hardcoded shortcodes
 require_once( 'more_shortcodes.php' );
+// list of images found in style.css (will be used for versioning)
+require_once( 'images_in_styles_list.php' );
