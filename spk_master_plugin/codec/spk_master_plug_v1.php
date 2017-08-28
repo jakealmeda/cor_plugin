@@ -38,11 +38,13 @@ function su_youtube_advanced_func( $atts ) {
     // download thumbnail
     spk_download_youtube_thumb( $youtubeid );
 
+    // NOTE: browser caching retains the same image even after replacement
+    $ytthumb_w_ver = plugins_url( "../images/youtubethumbs/0/".$youtubeid.".jpg", __FILE__ ); //."?".date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."../images/youtubethumbs/0/".$youtubeid.".jpg" ) );
     //                         <!--img src="'.$secured.'://img.youtube.com/vi/'.$youtubeid.'/0.jpg" class="thumbnail" id="thumbnail_'.$youtubeid.'" / -->
     $return = '<div class="module-video" id="'.$youtubeid.'">
                     <div class="video-image" id="video_image_'.$youtubeid.'"><div class="module-wrap">
                         <div class="video-play" id="video_play_'.$youtubeid.'"></div>
-                        <img src="'.plugins_url( "../images/youtubethumbs/0/".$youtubeid.".jpg", __FILE__ ).'" class="thumbnail" id="thumbnail_'.$youtubeid.'" />
+                        <img src="'.$ytthumb_w_ver.'" class="thumbnail" id="thumbnail_'.$youtubeid.'" />
                     </div></div>
                 </div>';
     
@@ -277,7 +279,7 @@ function swps_st_externals() {
     </div>
 
     <?php
-
+    // .'#ver='.date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ ).'../images/arrow.png' ) )
 }
 
 /* --------------------------------------------------------------------------------------------
