@@ -14,7 +14,7 @@ function spk_genesis_header_scripts_js_func() {
 	if( spk_bot_detected() ) {
 		return '<meta name="p:domain_verify" content="0a4ace3e1ac7c1854a32de7541879163"/>
 				
-				<script async src="'.plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js".'"></script>
+				<script async src="'.plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js?ver=".date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/adsbygoogle.js" ) ).'"></script>
 				<script>
 				  (adsbygoogle = window.adsbygoogle || []).push({
 				    google_ad_client: "ca-pub-0947746501358966",
@@ -37,7 +37,7 @@ function spk_genesis_footer_scripts_js_func() {
 				 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), 
 				 
 				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) 
-				 })(window,document,'script','".plugin_dir_url( __FILE__ ).'js_external/google_analytics.js'."','ga'); 
+				 })(window,document,'script','".plugin_dir_url( __FILE__ ).'js_external/google_analytics.js?ver='.date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/google_analytics.js" ) )."','ga'); 
 				 ga('create', 'UA-556922-1', 'auto'); 
 				 ga('send', 'pageview'); 
 				</script>
@@ -47,7 +47,7 @@ function spk_genesis_footer_scripts_js_func() {
 				  if (!_fbq.loaded) {
 				    var fbds = document.createElement('script');
 				    fbds.async = true;
-				    fbds.src = '".plugin_dir_url( __FILE__ ).'js_external/fbds.js'."';
+				    fbds.src = '".plugin_dir_url( __FILE__ ).'js_external/fbds.js?ver='.date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/fbds.js" ) )."';
 				    var s = document.getElementsByTagName('script')[0];
 				    s.parentNode.insertBefore(fbds, s);
 				    _fbq.loaded = true;
@@ -64,7 +64,7 @@ function spk_genesis_footer_scripts_js_func() {
 				  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 				  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 				  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-				  })(window,document,'script','".plugin_dir_url( __FILE__ ).'js_external/google_analytics.js'."','ga');
+				  })(window,document,'script','".plugin_dir_url( __FILE__ ).'js_external/google_analytics.js?ver='.date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/google_analytics.js" ) )."','ga');
 
 				  ga('create', 'UA-90942410-1', 'auto');
 				  ga('send', 'pageview');
@@ -81,7 +81,7 @@ function spk_genesis_footer_scripts_js_func() {
 add_shortcode( 'spk_adsbygoogle_js', 'spk_hide_me_from_google_pagespeedinsights' );
 function spk_hide_me_from_google_pagespeedinsights() {
 	if( spk_bot_detected() ) {
-    	return '<script async src="'.plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js".'"></script>
+    	return '<script async src="'.plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js?ver=".date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/adsbygoogle.js" ) ).'"></script>
 				<!-- Page & Post Article Body Resposive Ad -->
 				<ins class="adsbygoogle"
 				     style="display:block"
@@ -102,7 +102,7 @@ function spk_hide_me_from_google_pagespeedinsights() {
 add_shortcode( 'spk_google_suggested_articles_js', 'spk_hide_me_from_google_pagespeedinsights_2' );
 function spk_hide_me_from_google_pagespeedinsights_2() {
 	if( spk_bot_detected() ) {
-    	return '<script async src="'.plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js".'"></script>
+    	return '<script async src="'.plugin_dir_url( __FILE__ )."js_external/adsbygoogle.js?ver=".date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/adsbygoogle.js" ) ).'"></script>
 				<ins class="adsbygoogle"
 				     style="display:block"
 				     data-ad-format="autorelaxed"
@@ -121,7 +121,7 @@ add_shortcode( 'spk_amazon_market_place', 'spk_amazon_market_place_func' );
 function spk_amazon_market_place_func() {
 	//if( strpos( $_SERVER['HTTP_USER_AGENT'], "Google Page Speed Insights" ) == FALSE ) {
 	if( spk_bot_detected() ) {
-		return '<script src="'.plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js".'"></script>';
+		return '<script src="'.plugin_dir_url( __FILE__ )."js_external/amazon_marketplace.js?ver=".date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."js_external/amazon_marketplace.js" ) ).'"></script>';
 	}
 }
 
