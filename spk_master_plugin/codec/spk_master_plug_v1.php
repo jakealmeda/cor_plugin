@@ -442,7 +442,7 @@ function spk_save_transferdiv_meta( $post_id, $post, $update ) {
  * | ENQUEUE ADDTHIS SCRIPTS | Async load external js
  * ----------------------------------------------------------------------------------------- */
 function spk_theme_skrips() {
-    wp_register_script( 'spk_add_this_external', site_url().'/wp-content/plugins/spk_master_plugin/js_external/addthis.js', NULL, NULL, TRUE );
+    wp_register_script( 'spk_add_this_external', site_url().'/wp-content/plugins/spk_master_plugin/js_external/addthis.js', NULL, date( 'YmdHis', filemtime( plugin_dir_path( __FILE__ )."../js_external/addthis.js" ) ), TRUE );
     wp_enqueue_script( 'spk_add_this_external' );
 }
 add_action( 'wp_enqueue_scripts', 'spk_theme_skrips');
