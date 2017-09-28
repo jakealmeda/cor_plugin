@@ -186,7 +186,7 @@ function swps_st_externals() {
         <div class="wrap">
             <div class="media">
             <div class="media-img"><a class="item-icon icon-phonecoaching" href="<?php echo get_permalink( spk_master_get_post_id( 'phone-coaching' ) ); ?>"></a></div>
-            <div class="media-bd"><a href="<?php echo get_permalink( spk_master_get_post_id( 'phone-coaching' ) ); ?>"><h5>1 Hour Phone/Skype Coaching Session</h5></a></div>
+            <div class="media-bd"><a href="<?php echo get_permalink( '22818' ); ?>"><h5>1 Hour Phone/Skype Coaching Session</h5></a></div>
             </div>
             <div class="divider-line clearfix space-vertical-half"></div>
             <div class="media">
@@ -242,7 +242,7 @@ function swps_st_externals() {
         <div class="wrap">
             <div class="media">
             <div class="media-img media-right"><a class="item-icon icon-phonecoaching" href="<?php echo get_permalink( spk_master_get_post_id( 'phone-coaching' ) ); ?>"></a></div>
-            <div class="media-bd"><a href="<?php echo get_permalink( spk_master_get_post_id( 'phone-coaching' ) ); ?>"><h5>1 Hour Phone/Skype Coaching Session</h5></a></div>
+            <div class="media-bd"><a href="<?php echo get_permalink( '22818' ); ?>"><h5>1 Hour Phone/Skype Coaching Session</h5></a></div>
             </div>
             <div class="divider-line clearfix space-vertical-half"></div>
             <div class="media">
